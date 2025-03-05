@@ -1,0 +1,30 @@
+services:
+  web:
+    build: .
+    ports:
+      - "${APP_PORT:-5000}:5000"
+    environment:
+      - INSTANCE_NAME=local
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - DB_HOST=db
+      - DB_PORT=5432
+      - APP_PORT=${APP_PORT:-5000}
+    depends_on:
+      - db
+  
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
